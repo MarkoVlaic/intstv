@@ -1,0 +1,19 @@
+{
+  "name": "light",
+  "unique_id": "virt_light",
+  "device_class": "illuminance",
+  "state_topic": "homeassistant/sensor/illuminance/state",
+  "unit_of_measurement": "%",
+  "suggested_display_precision": 1,
+  "device": {
+    "identifiers": [
+      "virt_light000"
+    ],
+    "name": "virtual light sensor",
+    "manufacturer": "Example sensors Ltd.",
+    "model": "G9",
+    "serial_number": "12AE3010545",
+    "hw_version": "1.01a",
+    "sw_version": "2024.1.0"
+  }
+}
