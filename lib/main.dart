@@ -5,6 +5,9 @@ import 'package:luminar_control_app/screens/home_screen.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
+import 'home_assistant_service.dart';
+//TOKEN: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIwN2EwMTE5NmQ0YWQ0Yjk5YWViZWEzODE5MmQ4ZDBiMCIsImlhdCI6MTcxNzQ5OTgzMywiZXhwIjoyMDMyODU5ODMzfQ.n5xZFksIZtUIhV7IIH0cirnIdLzGjfo7X2xonKNDI0Y
+
 const Color seedAppColor = Color.fromARGB(255, 166, 255, 188);
 
 TextTheme myAppTextTheme = const TextTheme(
