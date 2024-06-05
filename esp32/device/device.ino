@@ -4,6 +4,7 @@
 
 #define DHTPIN 4     // Pin which is connected to the DHT sensor.
 #define DHTTYPE DHT11   // DHT 11
+#define LIGHT_SENSOR_PIN 36 
 
 DHT dht(DHTPIN, DHTTYPE);
 
@@ -42,7 +43,8 @@ char* dht_temp_discovery_json = "{"
 "  \"unique_id\": \"esp_temperature\","
 "  \"device_class\": \"temperature\","
 "  \"state_topic\": \"homeassistant/sensor/dht/state\","
-"  \"unit_of_measurement\": \"%\","
+"   \"value_template\": \"{{ value_json.temperature }}\","
+"  \"unit_of_measurement\": \"°C\","
 "  \"suggested_display_precision\": 1,"
 "  \"device\": {"
 "    \"identifiers\": ["
@@ -62,18 +64,13 @@ char* dht_hum_discovery_json = "{"
 "  \"unique_id\": \"esp_humidity\","
 "  \"device_class\": \"humidity\","
 "  \"state_topic\": \"homeassistant/sensor/dht/state\","
+"  \"value_template\": \"{{ value_json.humidity }}\","
 "  \"unit_of_measurement\": \"%\","
 "  \"suggested_display_precision\": 1,"
 "  \"device\": {"
 "    \"identifiers\": ["
 "      \"dht000\""
 "    ],"
-"    \"name\": \"dht sensor\","
-"    \"manufacturer\": \"Example dht sensors Ltd.\","
-"    \"model\": \"mihael\","
-"    \"serial_number\": \"mihael\","
-"    \"hw_version\": \"1.01a\","
-"    \"sw_version\": \"2024.1.0\""
 "  }"
 "}";
 
@@ -130,39 +127,32 @@ void setup() {
   client.begin(espClient);
 }
 
+// maybe calculate size properly with sprintf
+// not today
+char reading_buf[256];
+
 void loop() {
   if (!client.isConnected()) {
     reconnect();
   }
   client.update();
 
-  if(!discovery_sent) {
-    //send_discovery();  
-  }
+  float humidity = dht.readHumidity();
+  float temperature = dht.readTemperature();
 
-  // Reading temperature and humidity
-  /*float h = dht.readHumidity();
-  float t = dht.readTemperature();
-
-  // Check if any reads failed and exit early (to try again).
-  if (isnan(h) || isnan(t)) {
+  if (isnan(humidity) || isnan(temperature)) {
     Serial.println("Failed to read from DHT sensor!");
+    delay(2000);
     return;
   }
 
-  // Publish the temperature and humidity values to MQTT broker
-  char tempStr[8];
-  dtostrf(t, 1, 2, tempStr);
-  Serial.print("h: ");
-  Serial.print(h);
-  Serial.print(" t: ");
-  Serial.println(t);
-  //client.publish("home/temperature", tempStr);
+  int analogValue = analogRead(LIGHT_SENSOR_PIN);
+  float light_percent = ((analogValue * 1.0f - 1023) / 1023) * 100.0f;
+  
+  sprintf(reading_buf, "{ \"temperature\": %f, \"humidity\": %f}", temperature, humidity);
+  client.publish("homeassistant/sensor/dht/state", reading_buf, false, 1);
+  sprintf(reading_buf, "%f", light_percent);
+  client.publish("homeassistant/sensor/illuminance/state", reading_buf, false, 1);
 
-  char humStr[8];
-  dtostrf(h, 1, 2, humStr);
-  //client.publish("home/humidity", humStr);*/
-
-  // Wait a few seconds between measurements.
   delay(2000);
 }
