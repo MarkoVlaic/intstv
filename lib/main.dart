@@ -66,6 +66,7 @@ class MyApp extends ConsumerWidget {
           await Future.delayed(const Duration(seconds: 0), () async {
             // fetch and save data
             List<HAScene> scenes = await haService.fetchScenes();
+            //await haService.fetchApiServices();
             ref.read(scenesProvider.notifier).setScenes(scenes);
           });
 

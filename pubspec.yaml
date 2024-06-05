@@ -41,6 +41,8 @@ dependencies:
   build_runner: ^2.4.10
   page_transition: ^2.1.0
   flutter_dotenv: ^5.1.0
+  percent_indicator: ^4.2.3
+  flutter_animation_progress_bar: ^2.3.1
 
 dev_dependencies:
   flutter_test:

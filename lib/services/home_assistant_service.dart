@@ -73,9 +73,11 @@ class HomeAssistantService {
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
         // scenes are enitites with id like scene.somehting_somehthing
+        log(response.body);
         final filterSceneData = data.where((entity) {
           return entity['entity_id'].split('.').first == 'scene';
         });
+
         return filterSceneData.map((sceneJson) => HAScene.fromJson(sceneJson)).toList();
       } else {
         throw Exception('Failed to fetch scenes: GET /api/states');
@@ -97,6 +99,7 @@ class HomeAssistantService {
         },
       );
       if (response.statusCode == 200) {
+        log(response.body);
         return true;
       } else {
         throw Exception('Failed to fetch services: GET /api/services');

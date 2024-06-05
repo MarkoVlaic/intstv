@@ -4,6 +4,7 @@ import 'package:luminar_control_app/models/ha_entity_state.dart';
 import 'package:luminar_control_app/providers/ha_service_provider.dart';
 import 'package:luminar_control_app/services/home_assistant_service.dart';
 import 'package:luminar_control_app/widgets/light_control.dart';
+import 'package:luminar_control_app/widgets/sensor_preview.dart';
 
 class RoomControlScreen extends ConsumerWidget {
   const RoomControlScreen({
@@ -29,7 +30,12 @@ class RoomControlScreen extends ConsumerWidget {
     final size = MediaQuery.of(context).size;
     final haService = ref.watch(haServiceProvider);
     return FutureBuilder<List<HaEntityState>>(
-      future: _fetchDevices(haService, entityIDs),
+      future: _fetchDevices(haService, [
+        ...entityIDs,
+        "sensor.virtual_dht_sensor_bedroom_temperature",
+        "sensor.virtual_light_sensor_bedroom_light",
+        "sensor.virtual_dht_sensor_bedroom_humidity"
+      ]),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // Return a loading indicator while waiting for the data
@@ -64,6 +70,22 @@ class RoomControlScreen extends ConsumerWidget {
                           color: Theme.of(context).colorScheme.onPrimaryContainer,
                           height: .5,
                           width: double.infinity,
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              ...devices.map(
+                                (entity) {
+                                  if (entity.domain == 'sensor') {
+                                    return SensorPreview(entity);
+                                  } else {
+                                    return Container();
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                         ...devices.map(
                           (entity) {

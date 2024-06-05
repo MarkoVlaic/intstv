@@ -15,6 +15,7 @@ class LightControl extends ConsumerStatefulWidget {
 class _LightControlState extends ConsumerState<LightControl> {
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final haService = ref.watch(haServiceProvider);
     bool isOn = widget.lightState?.state == 'on';
     Color iconColor = isOn ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.inversePrimary;
@@ -23,37 +24,47 @@ class _LightControlState extends ConsumerState<LightControl> {
             color: isOn
                 ? Theme.of(context).colorScheme.inversePrimary
                 : Theme.of(context).colorScheme.secondaryContainer.withOpacity(.2),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.light, color: iconColor),
-                        const SizedBox(width: 10),
-                        Text(widget.lightState!.name),
-                      ],
-                    ),
-                    Switch(
-                      value: isOn,
-                      onChanged: (newState) {
-                        setState(() {
-                          if (widget.lightState?.state == 'on') {
-                            widget.lightState?.state = 'off';
-                          } else {
-                            widget.lightState?.state = 'on';
-                          }
-                        });
-                        haService.executeService(widget.lightState!.entityId, 'toggle');
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 200,
-                )
-              ],
+            child: Padding(
+              padding: const EdgeInsets.all(6.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.light, color: iconColor),
+                          const SizedBox(width: 10),
+                          Container(
+                            constraints: BoxConstraints(maxWidth: (size.width * .7) / 2),
+                            child: Text(
+                              widget.lightState!.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Switch(
+                        value: isOn,
+                        onChanged: (newState) {
+                          setState(() {
+                            if (widget.lightState?.state == 'on') {
+                              widget.lightState?.state = 'off';
+                            } else {
+                              widget.lightState?.state = 'on';
+                            }
+                          });
+                          haService.executeService(widget.lightState!.entityId, 'toggle');
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 200,
+                  )
+                ],
+              ),
             ),
           )
         : Container();
