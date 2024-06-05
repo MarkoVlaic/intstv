@@ -32,7 +32,6 @@ usage: vdev.py add [-h] -i ID
 optional arguments:
   -h, --help      show this help message and exit
   -i ID, --id ID  id of the new device
-(venv) [marko@fedora vdev]$ 
 ```
 
 ```console
