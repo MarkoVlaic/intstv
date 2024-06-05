@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:luminar_control_app/models/ha_scene.dart';
+import 'package:luminar_control_app/providers/ha_service_provider.dart';
+import 'package:luminar_control_app/providers/scenes_provider.dart';
 import 'package:luminar_control_app/providers/theme_provider.dart';
 import 'package:luminar_control_app/screens/home_screen.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:page_transition/page_transition.dart';
-
-import 'home_assistant_service.dart';
-//TOKEN: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIwN2EwMTE5NmQ0YWQ0Yjk5YWViZWEzODE5MmQ4ZDBiMCIsImlhdCI6MTcxNzQ5OTgzMywiZXhwIjoyMDMyODU5ODMzfQ.n5xZFksIZtUIhV7IIH0cirnIdLzGjfo7X2xonKNDI0Y
 
 const Color seedAppColor = Color.fromARGB(255, 166, 255, 188);
 
@@ -44,6 +44,8 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isLightThemeActive = ref.watch(themeProvider);
+    final haService = ref.watch(haServiceProvider);
+
     return MaterialApp(
       title: 'Lunar Control App',
       debugShowCheckedModeBanner: false,
@@ -58,15 +60,17 @@ class MyApp extends ConsumerWidget {
           color: !isLightThemeActive ? lightTheme.colorScheme.inversePrimary : darkTheme.colorScheme.inversePrimary,
           size: 100,
         ),
-
         screenFunction: () async {
           //
           // connect to Home Assistant
-          // await Future.delayed(const Duration(seconds: 2), () {});
+          await Future.delayed(const Duration(seconds: 0), () async {
+            // fetch and save data
+            List<HAScene> scenes = await haService.fetchScenes();
+            ref.read(scenesProvider.notifier).setScenes(scenes);
+          });
 
           return const HomeScreen();
         },
-        // splashTransition: SplashTransition.rotationTransition,
         pageTransitionType: PageTransitionType.fade,
       ),
     );
@@ -81,10 +85,10 @@ class RepeatingBounceIcon extends StatefulWidget {
   const RepeatingBounceIcon({super.key, required this.icon, required this.color, required this.size});
 
   @override
-  _RepeatingBounceIconState createState() => _RepeatingBounceIconState();
+  RepeatingBounceIconState createState() => RepeatingBounceIconState();
 }
 
-class _RepeatingBounceIconState extends State<RepeatingBounceIcon> with SingleTickerProviderStateMixin {
+class RepeatingBounceIconState extends State<RepeatingBounceIcon> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
