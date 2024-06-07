@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:luminar_control_app/models/ha_entity_state.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class SensorPreview extends ConsumerStatefulWidget {
   final HaEntityState? lightState;
@@ -53,7 +52,7 @@ class _SensorPreviewState extends ConsumerState<SensorPreview> {
                       lineWidth: 5.0,
                       animation: true,
                       animationDuration: 700,
-                      percent: double.parse(widget.lightState!.state) / 100,
+                      percent: widget.lightState!.state != "unknown" ? double.parse(widget.lightState!.state) / 100 : 0,
                       center: Text('${widget.lightState!.state.substring(0, 4)} ${isTempSensor ? '°C' : '%'}'),
                       progressColor: Theme.of(context).colorScheme.primary,
                       curve: Curves.decelerate,
