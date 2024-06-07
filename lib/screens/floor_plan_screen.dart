@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:luminar_control_app/providers/scenes_provider.dart';
 import 'package:luminar_control_app/screens/room_control_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FloorPlanScreen extends ConsumerWidget {
   const FloorPlanScreen({super.key});
 
-  static const List<double> heightTopDividers = [13, 6.5];
-  static const List<double> widthLeftDividers = [6, 1.85];
+  static const List<double> heightTopDividers = [3, 4, 6.5, 13];
+  static const List<double> widthLeftDividers = [1.4, 6, 1.85, 6];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,7 +24,7 @@ class FloorPlanScreen extends ConsumerWidget {
           Text(
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineMedium,
-            'Track and manage your home!',
+            AppLocalizations.of(context)!.trackAndManageYourHome,
           ),
           const SizedBox(height: 50, width: double.infinity),
           Center(

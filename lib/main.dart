@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:luminar_control_app/models/ha_scene.dart';
 import 'package:luminar_control_app/providers/ha_service_provider.dart';
+import 'package:luminar_control_app/providers/language_provider.dart';
 import 'package:luminar_control_app/providers/scenes_provider.dart';
 import 'package:luminar_control_app/providers/theme_provider.dart';
 import 'package:luminar_control_app/screens/home_screen.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 const Color seedAppColor = Color.fromARGB(255, 166, 255, 188);
 
@@ -45,6 +47,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isLightThemeActive = ref.watch(themeProvider);
     final haService = ref.watch(haServiceProvider);
+    final language = ref.watch(languageProvider);
 
     return MaterialApp(
       title: 'Lunar Control App',
@@ -52,6 +55,9 @@ class MyApp extends ConsumerWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: isLightThemeActive ? ThemeMode.light : ThemeMode.dark,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: Locale(language.code),
       home: AnimatedSplashScreen.withScreenFunction(
         backgroundColor:
             isLightThemeActive ? lightTheme.colorScheme.primaryContainer : darkTheme.colorScheme.primaryContainer,
@@ -63,12 +69,16 @@ class MyApp extends ConsumerWidget {
         screenFunction: () async {
           //
           // connect to Home Assistant
-          await Future.delayed(const Duration(seconds: 0), () async {
-            // fetch and save data
-            List<HAScene> scenes = await haService.fetchScenes();
-            //await haService.fetchApiServices();
-            ref.read(scenesProvider.notifier).setScenes(scenes);
-          });
+
+          bool isApiRunning = await haService.testConnection();
+          if (!isApiRunning) {
+            return const HomeScreen();
+          }
+          // fetch and save data
+          List<HAScene> scenes = await haService.fetchScenes();
+          //await haService.fetchApiServices();
+
+          ref.read(scenesProvider.notifier).setScenes(scenes);
 
           return const HomeScreen();
         },

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:luminar_control_app/providers/language_provider.dart';
 import 'package:luminar_control_app/providers/theme_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -15,9 +16,8 @@ class SettingsScreen extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Column(
           children: [
-            // Text(AppLocalizations.of(context)!.general, style: Theme.of(context).textTheme.headlineSmall),
             const SizedBox(height: 25),
-            Text('General', style: Theme.of(context).textTheme.headlineMedium),
+            Text(AppLocalizations.of(context)!.general, style: Theme.of(context).textTheme.headlineMedium),
             Container(
               margin: const EdgeInsets.only(bottom: 20),
               color: Theme.of(context).colorScheme.onSurface,
@@ -30,8 +30,7 @@ class SettingsScreen extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Text('${AppLocalizations.of(context)!.language}:'),
-                    const Text('Language'),
+                    Text('${AppLocalizations.of(context)!.language}:'),
                     DropdownMenu<Language>(
                       initialSelection: language,
                       enableSearch: false,
@@ -50,9 +49,7 @@ class SettingsScreen extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 100),
-            // Text(AppLocalizations.of(context)!.theme, style: Theme.of(context).textTheme.headlineSmall),
-            Text('Theme', style: Theme.of(context).textTheme.headlineMedium),
-
+            Text(AppLocalizations.of(context)!.theme, style: Theme.of(context).textTheme.headlineMedium),
             Container(
               margin: const EdgeInsets.only(bottom: 20),
               color: Theme.of(context).colorScheme.onSurface,
@@ -62,8 +59,7 @@ class SettingsScreen extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Text('${AppLocalizations.of(context)!.lightTheme}:'),
-                const Text('Light theme:'),
+                Text('${AppLocalizations.of(context)!.lightTheme}:'),
                 Row(
                   children: [
                     const Text('Off'),

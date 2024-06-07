@@ -43,6 +43,9 @@ dependencies:
   flutter_dotenv: ^5.1.0
   percent_indicator: ^4.2.3
   flutter_animation_progress_bar: ^2.3.1
+  flutter_localizations:
+    sdk: flutter
+  intl: any
 
 dev_dependencies:
   flutter_test:
@@ -61,6 +64,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  generate: true
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

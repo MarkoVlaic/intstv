@@ -4,9 +4,7 @@ enum Language {
   english(name: 'English', code: 'en'),
   hrvatski(name: 'Hrvatski', code: 'hr'),
   french(name: 'Français', code: 'fr'),
-  spanish(name: 'Español', code: 'es'),
-  portuguese(name: 'Português', code: 'pt'),
-  hungarian(name: 'Magyar', code: 'hu');
+  spanish(name: 'Español', code: 'es');
 
   const Language({required this.name, required this.code});
   final String name;
