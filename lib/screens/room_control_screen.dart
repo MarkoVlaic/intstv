@@ -32,9 +32,9 @@ class RoomControlScreen extends ConsumerWidget {
     return FutureBuilder<List<HaEntityState>>(
       future: _fetchDevices(haService, [
         ...entityIDs,
-        "sensor.virtual_dht_sensor_bedroom_temperature",
-        "sensor.virtual_light_sensor_bedroom_light",
-        "sensor.virtual_dht_sensor_bedroom_humidity"
+        //"sensor.virtual_dht_sensor_bedroom_temperature",
+        //"sensor.virtual_light_sensor_bedroom_light",
+        // "sensor.virtual_dht_sensor_bedroom_humidity"
       ]),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {

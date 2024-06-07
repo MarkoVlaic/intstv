@@ -26,7 +26,7 @@ class HomeAssistantService {
       );
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
-        log(response.body);
+
         return data.map((entity) => HaEntityState.fromJson(entity)).toList();
       } else {
         throw Exception('Failed to fetch states: GET /api/states');
@@ -60,6 +60,24 @@ class HomeAssistantService {
     }
   }
 
+  Future<bool> testConnection() async {
+    final url = Uri.parse('$_baseUrl/api');
+    try {
+      await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $_token',
+          'Content-Type': 'application/json',
+        },
+      );
+      // log(response.toString());
+      return true;
+    } catch (e) {
+      log(e.toString());
+      return false;
+    }
+  }
+
   Future<List<HAScene>> fetchScenes() async {
     final url = Uri.parse('$_baseUrl/api/states');
     try {
@@ -73,12 +91,36 @@ class HomeAssistantService {
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
         // scenes are enitites with id like scene.somehting_somehthing
-        log(response.body);
-        final filterSceneData = data.where((entity) {
-          return entity['entity_id'].split('.').first == 'scene';
-        });
+        final List<HAScene> scenes = [];
+        final List<dynamic> sensors = [];
 
-        return filterSceneData.map((sceneJson) => HAScene.fromJson(sceneJson)).toList();
+        for (var entity in data) {
+          List<String> entityNameTokens = entity['entity_id'].split('.');
+          if (entityNameTokens.first == 'scene') {
+            scenes.add(HAScene.fromJson(entity));
+          } else if (entityNameTokens.first == 'sensor') {
+            sensors.add(entity);
+          }
+        }
+
+        for (var entitySensor in sensors) {
+          String entityIdTokens = entitySensor['entity_id'].split('.')[1];
+          if (!entityIdTokens.startsWith('virtual')) continue;
+          List<String> entityNameTokens = entityIdTokens.split('_');
+          int index = 0;
+          if (entityNameTokens.contains('bedroom')) {
+            index = scenes.indexWhere((scene) => scene.entityId.startsWith('scene.bedroom'));
+          } else if (entityNameTokens.contains('kitchen')) {
+            index = scenes.indexWhere((scene) => scene.entityId.startsWith('scene.kitchen'));
+          } else if (entityNameTokens.contains('dining')) {
+            index = scenes.indexWhere((scene) => scene.entityId.startsWith('scene.dining'));
+          } else {
+            continue;
+          }
+          scenes[index].attributes.entityIds.add(entitySensor['entity_id']);
+        }
+        if (scenes.length > 3) return scenes.take(3).toList();
+        return scenes;
       } else {
         throw Exception('Failed to fetch scenes: GET /api/states');
       }
@@ -99,7 +141,6 @@ class HomeAssistantService {
         },
       );
       if (response.statusCode == 200) {
-        log(response.body);
         return true;
       } else {
         throw Exception('Failed to fetch services: GET /api/services');
