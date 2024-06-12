@@ -61,8 +61,8 @@ To install and run this app you need to install Flutter and Android Studio or VS
 <table align="center">
   <tr>
     <td>Room#1 screen</td>
-    <td>Room#1 screen</td>
-    <td>Room#1 screen</td>
+    <td>Room#2 screen</td>
+    <td>Room#3 screen</td>
   </tr>
   <tr>
     <td valign="top"><img src="assets/screenShots/screens/light_bedroom.png"></td>
