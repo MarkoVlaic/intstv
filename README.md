@@ -34,7 +34,7 @@ To install and run this app you need to install Flutter and Android Studio or VS
 
 - if you have more than one AVD running, you will be asked to choose on which one you want your application to run, enter number of AVD and continue
 
-- building will take some time, few minutes at least, after building is done app will automatically start
+- building will take some time, few minutes at least, after building is done, app will start automatically
 
 <br>
 
