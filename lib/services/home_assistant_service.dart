@@ -105,10 +105,11 @@ class HomeAssistantService {
 
         for (var entitySensor in sensors) {
           String entityIdTokens = entitySensor['entity_id'].split('.')[1];
-          if (!entityIdTokens.startsWith('virtual')) continue;
+          if ((!entityIdTokens.startsWith('virtual') && !entityIdTokens.startsWith('light_sensor_esp'))) continue;
           List<String> entityNameTokens = entityIdTokens.split('_');
+
           int index = 0;
-          if (entityNameTokens.contains('bedroom')) {
+          if (entityNameTokens.contains('bedroom') || entityNameTokens.contains('esp')) {
             index = scenes.indexWhere((scene) => scene.entityId.startsWith('scene.bedroom'));
           } else if (entityNameTokens.contains('kitchen')) {
             index = scenes.indexWhere((scene) => scene.entityId.startsWith('scene.kitchen'));
@@ -119,6 +120,9 @@ class HomeAssistantService {
           }
           scenes[index].attributes.entityIds.add(entitySensor['entity_id']);
         }
+        // int tempInd = scenes.indexWhere((scene) => scene.entityId.startsWith('scene.bedroom'));
+        //scenes[tempInd].attributes.entityIds.add('sensor.dht_sensor_temperature');
+
         if (scenes.length > 3) return scenes.take(3).toList();
         return scenes;
       } else {

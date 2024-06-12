@@ -52,7 +52,9 @@ class _SensorPreviewState extends ConsumerState<SensorPreview> {
                       lineWidth: 5.0,
                       animation: true,
                       animationDuration: 700,
-                      percent: widget.lightState!.state != "unknown" ? double.parse(widget.lightState!.state) / 100 : 0,
+                      percent: (widget.lightState!.state != "unavailable" && widget.lightState!.state != "unknown")
+                          ? double.parse(widget.lightState!.state) / 100
+                          : 0,
                       center: Text('${widget.lightState!.state.substring(0, 4)} ${isTempSensor ? '°C' : '%'}'),
                       progressColor: Theme.of(context).colorScheme.primary,
                       curve: Curves.decelerate,
