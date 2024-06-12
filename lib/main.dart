@@ -67,7 +67,6 @@ class MyApp extends ConsumerWidget {
           size: 100,
         ),
         screenFunction: () async {
-          //
           // connect to Home Assistant
 
           bool isApiRunning = await haService.testConnection();
@@ -76,8 +75,6 @@ class MyApp extends ConsumerWidget {
           }
           // fetch and save data
           List<HAScene> scenes = await haService.fetchScenes();
-          //await haService.fetchApiServices();
-
           ref.read(scenesProvider.notifier).setScenes(scenes);
 
           return const HomeScreen();

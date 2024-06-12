@@ -60,7 +60,6 @@ class _LightControlState extends ConsumerState<LightControl> {
                       ),
                     ],
                   ),
-                  //const SizedBox(height: 200)
                 ],
               ),
             ),

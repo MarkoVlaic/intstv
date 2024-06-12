@@ -23,9 +23,6 @@ class _SensorPreviewState extends ConsumerState<SensorPreview> {
       icon2 = const Icon(Icons.light_mode_outlined);
       // ignore: curly_braces_in_flow_control_structures
     } else if (isTempSensor) icon2 = const Icon(Icons.thermostat);
-
-    // Color iconColor = isOn ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.inversePrimary;
-    //Icon icon2 = isLightSensor ? const Icon(Icons.light_mode_outlined) : const Icon(Icons.water_drop_outlined);
     return widget.lightState != null
         ? Card(
             color: Theme.of(context).colorScheme.inversePrimary,
